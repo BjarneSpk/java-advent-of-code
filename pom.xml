@@ -36,6 +36,19 @@
                     <parameters>true</parameters>
                 </configuration>
             </plugin>
+            <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+                <execution>
+                    <id>App</id>
+                    <configuration>
+                        <mainClass>com.github.bjarnespk.main.App</mainClass>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 </project>
