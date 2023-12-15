@@ -1,4 +1,4 @@
-package com.github.bjarnespk;
+package com.github.bjarnespk.solutions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,23 +10,23 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Fourth {
+public class Day04 {
 
-    private static final String PATH = "/com/github/bjarnespk/input_fourth.txt";
+    private static final String PATH = "/com/github/bjarnespk/input/input_04.txt";
     private Map<Integer, Integer> map;
     private static final int LENGTH = 198;
     private static final int WINNING_CARDS = 10;
 
     public static void main(String[] args) {
-        new Fourth();
+        new Day04();
     }
 
-    public Fourth() {
+    public Day04() {
         start();
     }
 
     private void start() {
-        try (var rs = Fourth.class.getResourceAsStream(PATH);
+        try (var rs = Day04.class.getResourceAsStream(PATH);
              var isr = new InputStreamReader(Objects.requireNonNull(rs));
              var in = new BufferedReader(isr)) {
 

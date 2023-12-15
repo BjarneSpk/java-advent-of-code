@@ -1,15 +1,28 @@
-package com.github.bjarnespk;
+package com.github.bjarnespk.solutions;
+
+import com.github.bjarnespk.main.DayTemplate;
+import com.github.bjarnespk.main.Part;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-public class Third {
+public class Day03 implements DayTemplate {
+
+    @Override
+    public String solve(Part part, Scanner scanner) {
+        if (Objects.requireNonNull(part) == Part.PART_ONE) {
+            int sum = 0;
+            while (scanner.hasNext()) {
+            }
+            return String.valueOf(sum);
+        }
+        int sum = 0;
+        while (scanner.hasNext()) {
+        }
+        return String.valueOf(sum);
+    }
 
     private class ByteTuple implements Comparable<ByteTuple> {
 
@@ -69,20 +82,20 @@ public class Third {
 
     private byte[] bytes;
     private static final int SIZE = 140;
-    private static final String PATH = "/com/github/bjarnespk/input_third.txt";
+    private static final String PATH = "/com/github/bjarnespk/input/input_03.txt";
 
     public static void main(String[] args) {
-        new Third();
+        new Day03();
     }
 
-    public Third() {
+    public Day03() {
         taskOne();
         taskTwo();
     }
 
     private void taskTwo() {
         try (final InputStream rs = Objects.requireNonNull(
-                First.class.getResourceAsStream(PATH));
+                Day01.class.getResourceAsStream(PATH));
              final BufferedInputStream in = new BufferedInputStream(rs)) {
 
             bytes = in.readAllBytes();
@@ -94,7 +107,7 @@ public class Third {
 
     private void taskOne() {
         try (final InputStream rs = Objects.requireNonNull(
-                First.class.getResourceAsStream(PATH));
+                Day01.class.getResourceAsStream(PATH));
              final BufferedInputStream in = new BufferedInputStream(rs)) {
 
             final byte[][] bytes = readLinedAsArray(in);

@@ -1,44 +1,15 @@
-package com.github.bjarnespk;
+package com.github.bjarnespk.solutions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.github.bjarnespk.main.DayTemplate;
+import com.github.bjarnespk.main.Part;
+
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class Second {
+public class Day02 implements DayTemplate {
 
     private static final int RED = 12, GREEN = 13, BLUE = 14;
-
-    public static void main(String[] args) {
-        new Second();
-    }
-
-    public Second() {
-        try (var rs = Objects.requireNonNull(
-                First.class.getResourceAsStream("/com/github/bjarnespk/input_second.txt"));
-             var isr = new InputStreamReader(rs);
-             var in = new BufferedReader(isr)) {
-            int idSum = getValidIds(in);
-            System.out.println(idSum);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private int getValidIds(BufferedReader in) throws IOException {
-        String line;
-        int idSum = 0;
-        int powerSum = 0;
-        while ((line = in.readLine()) != null) {
-            if (gameIsValid(line)) {
-                idSum += Integer.parseInt(line.substring(5, line.indexOf(":")));
-            }
-            powerSum += getPowerSum(line);
-        }
-        System.out.println("Powersum: " + powerSum);
-        return idSum;
-    }
 
     private int getPowerSum(String line) {
         StringTokenizer st = new StringTokenizer(line, " ,;:");
@@ -71,5 +42,25 @@ public class Second {
             }
         }
         return true;
+    }
+
+    @Override
+    public String solve(Part part, Scanner scanner) {
+        if (Objects.requireNonNull(part) == Part.PART_ONE) {
+            int idSum = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (gameIsValid(line)) {
+                    idSum += Integer.parseInt(line.substring(5, line.indexOf(":")));
+                }
+            }
+            return String.valueOf(idSum);
+        }
+        int powerSum = 0;
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            powerSum += getPowerSum(line);
+        }
+        return String.valueOf(powerSum);
     }
 }

@@ -1,31 +1,29 @@
-package com.github.bjarnespk;
+package com.github.bjarnespk.solutions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.github.bjarnespk.main.DayTemplate;
+import com.github.bjarnespk.main.Part;
+
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.BiPredicate;
 
-public class First {
+public class Day01 implements DayTemplate {
 
-    public static void main(String[] args) {
-        try (var rs = Objects.requireNonNull(
-                First.class.getResourceAsStream("/com/github/bjarnespk/input_first.txt"));
-             var isr = new InputStreamReader(rs);
-             var in = new BufferedReader(isr)) {
-            String line;
-            int sum = 0, sum2 = 0;
-            while ((line = in.readLine()) != null) {
-                int digitSum = getDigitSum(line);
-                sum += digitSum;
-                sum2 += getDigitSum2(line);
+    @Override
+    public String solve(Part part, Scanner scanner) {
+        if (Objects.requireNonNull(part) == Part.PART_ONE) {
+            int sum = 0;
+            while (scanner.hasNext()) {
+                sum += getDigitSum(scanner.nextLine());
             }
-            System.out.println("First Task: " + sum);
-            System.out.println("Second Task: " + sum2);
-        } catch (IOException e) {
-            e.printStackTrace();
+            return String.valueOf(sum);
         }
+        int sum = 0;
+        while (scanner.hasNext()) {
+            sum += getDigitSum2(scanner.nextLine());
+        }
+        return String.valueOf(sum);
     }
 
     private static int getDigitSum(String line) {

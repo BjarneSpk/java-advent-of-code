@@ -1,29 +1,29 @@
-package com.github.bjarnespk;
+package com.github.bjarnespk.solutions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Fifth {
+public class Day05 {
 
     private record Tuple(long start, long range) implements Comparable<Tuple> {
 
         @Override
-        public int compareTo(Tuple o) {
-            if (this.start < o.start) {
+        public int compareTo(Tuple other) {
+            if (this.start < other.start) {
                 return -1;
-            } else if (this.start > o.start) {
+            } else if (this.start > other.start) {
                 return 1;
             } else {
-                return Long.compare(this.range, o.range);
+                return Long.compare(this.range, other.range);
             }
         }
     }
 
-    private static final String PATH = "/com/github/bjarnespk/input_fifth_test.txt";
+    private static final String PATH = "/com/github/bjarnespk/input/input_05.txt";
 
-    public Fifth() {
+    public Day05() {
         // partOne();
         partTwo();
     }
@@ -60,54 +60,58 @@ public class Fifth {
             if (Character.isDigit(line.charAt(0))) {
                 final Set<Tuple> tempSeeds = new TreeSet<>();
                 do {
-                    final long[] transformations = Arrays.stream(line.split(" "))
-                            .mapToLong(Long::parseLong)
-                            .toArray();
-
-                    final Iterator<Tuple> it = currentSeeds.iterator();
-                    while (it.hasNext()) {
-                        final Tuple tuple = it.next();
-                        long lower = tuple.start();
-                        long upper = tuple.start() + tuple.range() - 1;
-                        long range = tuple.range();
-
-                        long move = transformations[0] - transformations[1];
-
-                        long lowerTrans = transformations[1];
-                        long upperTrans = transformations[1] + transformations[2] - 1;
-                        long rangeTrans = transformations[2];
-
-                        if (lower >= lowerTrans && upper <= upperTrans) {
-                            tempSeeds.add(new Tuple(lower + move, range));
-                            it.remove();
-                        } else if (lower < lowerTrans && upper > upperTrans) {
-                            tempSeeds.add(new Tuple(lowerTrans + move, rangeTrans));
-                            tempSeeds.add(new Tuple(lower, lowerTrans - lower));
-                            tempSeeds.add(new Tuple(upperTrans + 1, upper - upperTrans));
-                            it.remove();
-                        } else if (lower < lowerTrans && upper > lowerTrans && upper <= upperTrans) {
-                            tempSeeds.add(new Tuple(lower, lowerTrans - lower));
-                            tempSeeds.add(new Tuple(lowerTrans + move, upper - lowerTrans + 1));
-                            it.remove();
-                        } else if (lower >= lowerTrans && lower < upperTrans && upper > upperTrans) {
-                            tempSeeds.add(new Tuple(lower + move, upperTrans - lower + 1));
-                            tempSeeds.add(new Tuple(upperTrans + 1, upper - upperTrans));
-                            it.remove();
-                        } else if (lower == lowerTrans && upper > upperTrans) {
-                            tempSeeds.add(new Tuple(lower + move, rangeTrans));
-                            tempSeeds.add(new Tuple(upperTrans + 1, upper - upperTrans));
-                            it.remove();
-                        } else if (upper == upperTrans && lower < lowerTrans) {
-                            tempSeeds.add(new Tuple(lowerTrans + move, range));
-                            tempSeeds.add(new Tuple(lower, lowerTrans - lower));
-                            it.remove();
-                        }
-                    }
+                    extracted(currentSeeds, line, tempSeeds);
                 } while ((line = in.readLine()) != null && !line.isBlank());
                 currentSeeds.addAll(tempSeeds);
             }
         }
         return currentSeeds.stream().mapToLong(Tuple::start).min().orElse(-1);
+    }
+
+    private void extracted(Set<Tuple> currentSeeds, String line, Set<Tuple> tempSeeds) {
+        final long[] transformations = getTransformations(line);
+
+        final Iterator<Tuple> it = currentSeeds.iterator();
+        while (it.hasNext()) {
+            transform(tempSeeds, transformations, it);
+        }
+    }
+
+    private void transform(Set<Tuple> tempSeeds, long[] transformations, Iterator<Tuple> it) {
+        final Tuple tuple = it.next();
+        long lower = tuple.start();
+        long upper = tuple.start() + tuple.range() - 1;
+        long range = tuple.range();
+
+        long move = transformations[0] - transformations[1];
+
+        long lowerTrans = transformations[1];
+        long upperTrans = transformations[1] + transformations[2] - 1;
+        long rangeTrans = transformations[2];
+
+        if ((lower >= lowerTrans) && (upper <= upperTrans)) {
+            tempSeeds.add(new Tuple(lower + move, range));
+            it.remove();
+        } else if ((lower < lowerTrans) && (upper > upperTrans)) {
+            tempSeeds.add(new Tuple(lowerTrans + move, rangeTrans));
+            tempSeeds.add(new Tuple(lower, lowerTrans - lower));
+            tempSeeds.add(new Tuple(upperTrans + 1, upper - upperTrans));
+            it.remove();
+        } else if ((lower < lowerTrans) && (upper >= lowerTrans) && (upper <= upperTrans)) {
+            tempSeeds.add(new Tuple(lower, lowerTrans - lower));
+            tempSeeds.add(new Tuple(lowerTrans + move, upper - lowerTrans + 1));
+            it.remove();
+        } else if ((lower >= lowerTrans) && (lower <= upperTrans) && (upper > upperTrans)) {
+            tempSeeds.add(new Tuple(lower + move, upperTrans - lower + 1));
+            tempSeeds.add(new Tuple(upperTrans + 1, upper - upperTrans));
+            it.remove();
+        }
+    }
+
+    private static long[] getTransformations(String line) {
+        return Arrays.stream(line.split(" "))
+                .mapToLong(Long::parseLong)
+                .toArray();
     }
 
     private void partOne() {
@@ -148,6 +152,6 @@ public class Fifth {
     }
 
     public static void main(String[] args) {
-        new Fifth();
+        new Day05();
     }
 }
