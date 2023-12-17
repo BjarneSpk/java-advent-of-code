@@ -6,7 +6,12 @@ import com.github.bjarnespk.main.Part;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Day03 implements DayTemplate {
 

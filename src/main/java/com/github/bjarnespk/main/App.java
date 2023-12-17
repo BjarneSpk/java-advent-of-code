@@ -3,20 +3,25 @@ package com.github.bjarnespk.main;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
-    private static final int[] days = {6};
-    private static final Part[] parts = {Part.PART_ONE};
+    // Modify these two for default values
+    private static final Set<Integer> days = Set.of(7);
+    private static final Set<Part> parts = Set.of(Part.PART_ONE);
 
-    private static final String INPUT_PATH = "/com/github/bjarnespk/input/input_%s.txt";
+    private static final String INPUT_PATH = "/com/github/bjarnespk/%sinput/input_%s.txt";
     private static final String SOLUTION_PATH = "com.github.bjarnespk.solutions.Day%s";
-    private static Part[] partsToRun;
-    private static int[] daysToRun;
+    private static Set<Part> partsToRun = new TreeSet<>();
+    private static Set<Integer> daysToRun = new TreeSet<>();
+    private static String test = "";
 
     public static void main(String[] args) throws Exception {
+        new App(args);
+    }
+
+    private App(String[] args) throws Exception {
         if (args.length != 0) {
             parseCLI(args);
         } else {
@@ -26,42 +31,44 @@ public class App {
         for (int day : daysToRun) {
             String zeroFilledDay = (day < 10 ? "0" : "") + day;
             for (Part part : partsToRun) {
-                solveProblem(zeroFilledDay, part);
+                solveProblem(zeroFilledDay, part, test);
             }
         }
     }
 
-    private static void parseCLI(String[] args) {
-        int j = 0;
-        if (args[0].charAt(0) == '-') {
-            partsToRun = new Part[args[0].length() - 1];
-            for (int i = 1; i < args[0].length(); i++) {
-                partsToRun[i - 1] = switch (args[0].charAt(i)) {
-                    case '1' -> Part.PART_ONE;
-                    case '2' -> Part.PART_TWO;
-                    default -> throw new IllegalArgumentException();
-                };
+    private void parseCLI(String[] args) {
+        for (String arg : args) {
+            if (arg.charAt(0) == '-') {
+                setFlags(arg);
+            } else {
+                daysToRun.add(Integer.parseInt(arg));
             }
-            j++;
-        } else {
+        }
+        if (partsToRun.isEmpty()) {
             partsToRun = parts;
         }
-        daysToRun = new int[args.length - j];
-        int k = 0;
-        for (;j < args.length; j++) {
-            daysToRun[k++] = Integer.parseInt(args[j]);
+    }
+
+    private void setFlags(String arg) {
+        for (int j = 1; j < arg.length(); j++) {
+            switch (arg.charAt(j)) {
+                case '1' -> partsToRun.add(Part.PART_ONE);
+                case '2' -> partsToRun.add(Part.PART_TWO);
+                case 't' -> test = "test_";
+                default -> throw new IllegalArgumentException("Invalid flag");
+            }
         }
     }
 
-    private static void solveProblem(String zeroFilledDay, Part part) throws Exception {
-        try (var rs = App.class.getResourceAsStream(INPUT_PATH.formatted(zeroFilledDay));
+    public static void solveProblem(String zeroFilledDay, Part part, String test) throws Exception {
+        try (var rs = App.class.getResourceAsStream(INPUT_PATH.formatted(test, zeroFilledDay));
              var isr = new InputStreamReader(Objects.requireNonNull(rs));
              var in = new BufferedReader(isr);
              var scan = new Scanner(in)) {
             Class<?> cls = Class.forName(SOLUTION_PATH.formatted(zeroFilledDay));
-            Method m = cls.getDeclaredMethod("solve", Part.class, Scanner.class);
-            String answer = (String) m.invoke(cls.getDeclaredConstructor().newInstance(), part, scan);
-            System.out.printf("Day: %s %s Solution: %s%n", zeroFilledDay, part, answer);
+            Method m = cls.getMethod("timer", Part.class, Scanner.class);
+            Result answer = (Result) m.invoke(cls.getDeclaredConstructor().newInstance(), part, scan);
+            System.out.printf("Day: %s %s Solution: %s Time (ms): %.1f%n", zeroFilledDay, part, answer.result(), answer.time());
         }
     }
 }

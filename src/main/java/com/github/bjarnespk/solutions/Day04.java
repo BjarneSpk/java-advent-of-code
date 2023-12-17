@@ -1,51 +1,36 @@
 package com.github.bjarnespk.solutions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.github.bjarnespk.main.DayTemplate;
+import com.github.bjarnespk.main.Part;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Day04 {
+public class Day04 implements DayTemplate {
 
-    private static final String PATH = "/com/github/bjarnespk/input/input_04.txt";
     private Map<Integer, Integer> map;
     private static final int LENGTH = 198;
     private static final int WINNING_CARDS = 10;
 
-    public static void main(String[] args) {
-        new Day04();
-    }
-
-    public Day04() {
-        start();
-    }
-
-    private void start() {
-        try (var rs = Day04.class.getResourceAsStream(PATH);
-             var isr = new InputStreamReader(Objects.requireNonNull(rs));
-             var in = new BufferedReader(isr)) {
-
-            String line;
+    @Override
+    public String solve(Part part, Scanner scanner) {
+        initializeMap();
+        if (part == Part.PART_ONE) {
             int score = 0;
-            int scorePartTwo = 0;
-            initializeMap();
-            while ((line = in.readLine()) != null) {
-                score += getScore(line);
-                int n = getScorePartTwo(line);
-                scorePartTwo += n;
+            while (scanner.hasNext()) {
+                score += getScore(scanner.nextLine());
             }
-
-            System.out.println(score);
-            System.out.println(scorePartTwo);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            return String.valueOf(score);
         }
+        int score = 0;
+        while (scanner.hasNext()) {
+            score += getScorePartTwo(scanner.nextLine());
+        }
+        return String.valueOf(score);
     }
 
     private void initializeMap() {
