@@ -51,21 +51,27 @@ public class Day07 implements DayTemplate {
                     default -> 13;
                 };
             }
+            return hash + getHandValue(map, joker);
+        }
+
+        private static long getHandValue(HashMap<Character, Integer> map, int joker) {
             if (map.containsValue(5)) {
-                hash += 6 * (long) Math.pow(10, 10);
-            } else if (map.containsValue(4)) {
-                hash += (joker > 0 ? 6 : 5) * (long) Math.pow(10, 10);
-            } else if (map.containsValue(3)) {
+                return 6 * (long) Math.pow(10, 10);
+            }
+            if (map.containsValue(4)) {
+                return (joker > 0 ? 6 : 5) * (long) Math.pow(10, 10);
+            }
+            if (map.containsValue(3)) {
                 if (map.containsValue(2)) {
-                    hash += (joker > 0 ? 6 : 4) * (long) Math.pow(10, 10);
-                } else {
-                    if (joker == 1 || joker == 3) {
-                        hash += 5 * (long) Math.pow(10, 10);
-                    } else {
-                        hash += 3 * (long) Math.pow(10, 10);
-                    }
+                    return (joker > 0 ? 6 : 4) * (long) Math.pow(10, 10);
                 }
-            } else if (map.containsValue(2)) {
+                if (joker == 1 || joker == 3) {
+                    return 5 * (long) Math.pow(10, 10);
+                }
+                return 3 * (long) Math.pow(10, 10);
+
+            }
+            if (map.containsValue(2)) {
                 int num = 0;
                 for (int i : map.values()) {
                     if (i == 2) {
@@ -73,20 +79,17 @@ public class Day07 implements DayTemplate {
                     }
                 }
                 if (num == 2) {
-                    if (joker == 1) {
-                        hash += 4 * (long) Math.pow(10, 10);
-                    } else if (joker == 2){
-                        hash += 5 * (long) Math.pow(10, 10);
-                    } else {
-                        hash += 2 * (long) Math.pow(10, 10);
+                    if (joker > 0) {
+                        return (3 + joker) * (long) Math.pow(10, 10);
                     }
-                } else {
-                    hash += (joker > 0 ? 3 : 1) * (long) Math.pow(10, 10);
+                    return 2 * (long) Math.pow(10, 10);
                 }
-            } else if (map.containsKey('J')) {
-                hash += (long) Math.pow(10, 10);
+                return (joker > 0 ? 3 : 1) * (long) Math.pow(10, 10);
             }
-            return hash;
+            if (map.containsKey('J')) {
+                return (long) Math.pow(10, 10);
+            }
+            return 0;
         }
 
         private long calculateHash(String hand) {

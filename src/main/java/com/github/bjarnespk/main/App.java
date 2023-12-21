@@ -71,4 +71,8 @@ public class App {
             System.out.printf("Day: %s %s Solution: %s Time (ms): %.1f%n", zeroFilledDay, part, answer.result(), answer.time());
         }
     }
+
+    public static void solveProblem(String zeroFilledDay, Part part) throws Exception {
+        solveProblem(zeroFilledDay, part, "");
+    }
 }
