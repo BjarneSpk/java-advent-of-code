@@ -68,7 +68,8 @@ public class App {
             Class<?> cls = Class.forName(SOLUTION_PATH.formatted(zeroFilledDay));
             Method m = cls.getMethod("timer", Part.class, Scanner.class);
             Result answer = (Result) m.invoke(cls.getDeclaredConstructor().newInstance(), part, scan);
-            System.out.printf("Day: %s %s Solution: %s Time (ms): %.1f%n", zeroFilledDay, part, answer.result(), answer.time());
+            System.out.printf("Day: %s %s Solution: %s Time (ms): %.2f%n",
+                    zeroFilledDay, part, answer.result(), answer.time());
         }
     }
 

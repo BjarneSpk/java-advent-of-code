@@ -17,16 +17,11 @@ public class Day03 implements DayTemplate {
 
     @Override
     public String solve(Part part, Scanner scanner) {
+        scanner.close(); // a little bit ugly
         if (Objects.requireNonNull(part) == Part.PART_ONE) {
-            int sum = 0;
-            while (scanner.hasNext()) {
-            }
-            return String.valueOf(sum);
+            return String.valueOf(taskOne());
         }
-        int sum = 0;
-        while (scanner.hasNext()) {
-        }
-        return String.valueOf(sum);
+        return String.valueOf(taskTwo());
     }
 
     private class ByteTuple implements Comparable<ByteTuple> {
@@ -89,39 +84,31 @@ public class Day03 implements DayTemplate {
     private static final int SIZE = 140;
     private static final String PATH = "/com/github/bjarnespk/input/input_03.txt";
 
-    public static void main(String[] args) {
-        new Day03();
-    }
-
-    public Day03() {
-        taskOne();
-        taskTwo();
-    }
-
-    private void taskTwo() {
+    private int taskTwo() {
         try (final InputStream rs = Objects.requireNonNull(
                 Day01.class.getResourceAsStream(PATH));
              final BufferedInputStream in = new BufferedInputStream(rs)) {
 
             bytes = in.readAllBytes();
-            System.out.println("Task 1: " + getGearRatio());
+            return getGearRatio();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
-    private void taskOne() {
+    private int taskOne() {
         try (final InputStream rs = Objects.requireNonNull(
                 Day01.class.getResourceAsStream(PATH));
              final BufferedInputStream in = new BufferedInputStream(rs)) {
 
             final byte[][] bytes = readLinedAsArray(in);
 
-            int sum = getPartSum(bytes);
-            System.out.println("Task 1: " + sum);
+            return getPartSum(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
