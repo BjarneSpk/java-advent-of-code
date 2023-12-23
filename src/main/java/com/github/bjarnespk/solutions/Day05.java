@@ -1,11 +1,16 @@
 package com.github.bjarnespk.solutions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import com.github.bjarnespk.main.DayTemplate;
+import com.github.bjarnespk.main.Part;
 
-public class Day05 {
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class Day05 implements DayTemplate {
 
     private record Tuple(long start, long range) implements Comparable<Tuple> {
 
@@ -21,25 +26,16 @@ public class Day05 {
         }
     }
 
-    private static final String PATH = "/com/github/bjarnespk/input/input_05.txt";
-
-    public Day05() {
-        // partOne();
-        partTwo();
-    }
-
-    private void partTwo() {
-        try (var rs = getClass().getResourceAsStream(PATH);
-             var isr = new InputStreamReader(Objects.requireNonNull(rs));
-             var in = new BufferedReader(isr)) {
-            System.out.println(getMinimumLocationTwo(in));
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public String solve(Part part, Scanner scanner) {
+        if (part == Part.PART_ONE) {
+            return String.valueOf(getMinimumLocation(scanner));
         }
+        return String.valueOf(getMinimumLocationTwo(scanner));
     }
 
-    private Set<Tuple> getInitialSeeds(BufferedReader in) throws IOException {
-        String firstLine = in.readLine();
+    private Set<Tuple> getInitialSeeds(Scanner scanner) {
+        String firstLine = scanner.nextLine();
         long[] nums = Arrays.stream(firstLine.substring(7).split(" "))
                 .mapToLong(Long::parseLong)
                 .toArray();
@@ -48,20 +44,20 @@ public class Day05 {
         for (int i = 0; i < nums.length; i += 2) {
             set.add(new Tuple(nums[i], nums[i + 1]));
         }
-        in.readLine();
+        scanner.nextLine();
         return set;
     }
 
-    private long getMinimumLocationTwo(final BufferedReader in) throws IOException {
-        final Set<Tuple> currentSeeds = getInitialSeeds(in);
+    private long getMinimumLocationTwo(Scanner scanner) {
+        final Set<Tuple> currentSeeds = getInitialSeeds(scanner);
 
-        String line;
-        while ((line = in.readLine()) != null) {
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
             if (Character.isDigit(line.charAt(0))) {
                 final Set<Tuple> tempSeeds = new TreeSet<>();
                 do {
                     extracted(currentSeeds, line, tempSeeds);
-                } while ((line = in.readLine()) != null && !line.isBlank());
+                } while (scanner.hasNextLine() && !(line = scanner.nextLine()).isBlank());
                 currentSeeds.addAll(tempSeeds);
             }
         }
@@ -78,7 +74,7 @@ public class Day05 {
     }
 
     private void transform(Set<Tuple> tempSeeds, long[] transformations, Iterator<Tuple> it) {
-        final Tuple tuple = it.next();
+        Tuple tuple = it.next();
         long lower = tuple.start();
         long upper = tuple.start() + tuple.range() - 1;
         long range = tuple.range();
@@ -114,27 +110,17 @@ public class Day05 {
                 .toArray();
     }
 
-    private void partOne() {
-        try (var rs = getClass().getResourceAsStream(PATH);
-             var isr = new InputStreamReader(Objects.requireNonNull(rs));
-             var in = new BufferedReader(isr)) {
-            System.out.println(getMinimumLocation(in));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private long getMinimumLocation(BufferedReader in) throws IOException {
-        String firstLine = in.readLine();
+    private long getMinimumLocation(Scanner scanner) {
+        String firstLine = scanner.nextLine();
         long[] nums = Arrays.stream(firstLine.substring(7).split(" "))
                 .mapToLong(Long::parseLong)
                 .toArray();
-        in.readLine();
-        String line;
+        scanner.nextLine();
         Set<Integer> set = new HashSet<>();
-        while ((line = in.readLine()) != null) {
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
             set.clear();
-            while ((line = in.readLine()) != null && !line.isBlank()) {
+            while (scanner.hasNextLine() && !(line = scanner.nextLine()).isBlank()) {
                 long[] transformations = Arrays.stream(line.split(" "))
                         .mapToLong(Long::parseLong)
                         .toArray();
@@ -149,9 +135,5 @@ public class Day05 {
             }
         }
         return Arrays.stream(nums).min().orElse(-1);
-    }
-
-    public static void main(String[] args) {
-        new Day05();
     }
 }

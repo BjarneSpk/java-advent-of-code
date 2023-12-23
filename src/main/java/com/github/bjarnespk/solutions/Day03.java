@@ -3,25 +3,23 @@ package com.github.bjarnespk.solutions;
 import com.github.bjarnespk.main.DayTemplate;
 import com.github.bjarnespk.main.Part;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class Day03 implements DayTemplate {
 
     @Override
-    public String solve(Part part, Scanner scanner) {
-        scanner.close(); // a little bit ugly
-        if (Objects.requireNonNull(part) == Part.PART_ONE) {
-            return String.valueOf(taskOne());
+    public String solve(Part part, InputStream in) throws IOException {
+        if (part == Part.PART_TWO) {
+            bytes = in.readAllBytes();
+            return String.valueOf(getGearRatio());
         }
-        return String.valueOf(taskTwo());
+        byte[][] bytes = readLinesAsArray(in);
+        return String.valueOf(getPartSum(bytes));
     }
 
     private class ByteTuple implements Comparable<ByteTuple> {
@@ -82,37 +80,9 @@ public class Day03 implements DayTemplate {
 
     private byte[] bytes;
     private static final int SIZE = 140;
-    private static final String PATH = "/com/github/bjarnespk/input/input_03.txt";
-
-    private int taskTwo() {
-        try (final InputStream rs = Objects.requireNonNull(
-                Day01.class.getResourceAsStream(PATH));
-             final BufferedInputStream in = new BufferedInputStream(rs)) {
-
-            bytes = in.readAllBytes();
-            return getGearRatio();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    private int taskOne() {
-        try (final InputStream rs = Objects.requireNonNull(
-                Day01.class.getResourceAsStream(PATH));
-             final BufferedInputStream in = new BufferedInputStream(rs)) {
-
-            final byte[][] bytes = readLinedAsArray(in);
-
-            return getPartSum(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private static byte[][] readLinedAsArray(BufferedInputStream in) throws IOException {
+    private static byte[][] readLinesAsArray(InputStream in) throws IOException {
         byte[][] bytes = new byte[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             if (in.read(bytes[i]) != SIZE) {

@@ -1,6 +1,5 @@
 package com.github.bjarnespk.solutions;
 
-import com.github.bjarnespk.main.App;
 import com.github.bjarnespk.main.DayTemplate;
 import com.github.bjarnespk.main.Part;
 

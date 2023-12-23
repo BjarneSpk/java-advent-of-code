@@ -1,9 +1,13 @@
 package com.github.bjarnespk.main;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import com.github.bjarnespk.main.DayTemplate.Result;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class App {
 
@@ -17,11 +21,11 @@ public class App {
     private static Set<Integer> daysToRun = new TreeSet<>();
     private static String test = "";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         new App(args);
     }
 
-    private App(String[] args) throws Exception {
+    private App(String[] args) {
         if (args.length != 0) {
             parseCLI(args);
         } else {
@@ -60,20 +64,22 @@ public class App {
         }
     }
 
-    public static void solveProblem(String zeroFilledDay, Part part, String test) throws Exception {
+    public static void solveProblem(String zeroFilledDay, Part part, String test) {
         try (var rs = App.class.getResourceAsStream(INPUT_PATH.formatted(test, zeroFilledDay));
-             var isr = new InputStreamReader(Objects.requireNonNull(rs));
-             var in = new BufferedReader(isr);
-             var scan = new Scanner(in)) {
+             var in = new BufferedInputStream(Objects.requireNonNull(rs))) {
+
             Class<?> cls = Class.forName(SOLUTION_PATH.formatted(zeroFilledDay));
-            Method m = cls.getMethod("timer", Part.class, Scanner.class);
-            Result answer = (Result) m.invoke(cls.getDeclaredConstructor().newInstance(), part, scan);
+            Method m = cls.getMethod("timer", Part.class, InputStream.class);
+            Result answer = (Result) m.invoke(cls.getDeclaredConstructor().newInstance(), part, in);
+
             System.out.printf("Day: %s %s Solution: %s Time (ms): %.2f%n",
                     zeroFilledDay, part, answer.result(), answer.time());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void solveProblem(String zeroFilledDay, Part part) throws Exception {
+    public static void solveProblem(String zeroFilledDay, Part part) {
         solveProblem(zeroFilledDay, part, "");
     }
 }
