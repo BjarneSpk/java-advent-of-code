@@ -20,6 +20,7 @@ public class App {
     private static Set<Part> partsToRun = new TreeSet<>();
     private static Set<Integer> daysToRun = new TreeSet<>();
     private static String test = "";
+    public static final String TEST = "test_";
 
     public static void main(String[] args) {
         new App(args);

@@ -2,6 +2,7 @@ package com.github.bjarnespk.solutions;
 
 import com.github.bjarnespk.main.DayTemplate;
 import com.github.bjarnespk.main.Part;
+import com.github.bjarnespk.util.MathUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class Day08 implements DayTemplate {
         List<String> nodes = map.keySet().stream().filter(node -> node.charAt(2) == 'A').toList();
 
         long[] runs = getMinRunsPerNode(path, map, nodes);
-        long lcm = Arrays.stream(runs).reduce(this::lcm).orElseThrow();
+        long lcm = Arrays.stream(runs).reduce(MathUtils::lcm).orElseThrow();
         return String.valueOf(lcm * path.length);
     }
 
@@ -70,22 +71,6 @@ public class Day08 implements DayTemplate {
 
             map.put(start, new String[] {line.substring(7, 10), line.substring(12, 15)});
         }
-
         return map;
-    }
-
-    private long lcm(long number1, long number2) {
-        if (number1 == 0 || number2 == 0) {
-            return 0;
-        }
-        long absNumber1 = Math.abs(number1);
-        long absNumber2 = Math.abs(number2);
-        long absHigherNumber = Math.max(absNumber1, absNumber2);
-        long absLowerNumber = Math.min(absNumber1, absNumber2);
-        long lcm = absHigherNumber;
-        while (lcm % absLowerNumber != 0) {
-            lcm += absHigherNumber;
-        }
-        return lcm;
     }
 }

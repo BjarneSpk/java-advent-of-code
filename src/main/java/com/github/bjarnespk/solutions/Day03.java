@@ -1,5 +1,6 @@
 package com.github.bjarnespk.solutions;
 
+import com.github.bjarnespk.main.App;
 import com.github.bjarnespk.main.DayTemplate;
 import com.github.bjarnespk.main.Part;
 
@@ -18,8 +19,8 @@ public class Day03 implements DayTemplate {
             bytes = in.readAllBytes();
             return String.valueOf(getGearRatio());
         }
-        byte[][] bytes = readLinesAsArray(in);
-        return String.valueOf(getPartSum(bytes));
+        byte[][] bytes2 = readLinesAsArray(in);
+        return String.valueOf(getPartSum(bytes2));
     }
 
     private class ByteTuple implements Comparable<ByteTuple> {
@@ -83,14 +84,14 @@ public class Day03 implements DayTemplate {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static byte[][] readLinesAsArray(InputStream in) throws IOException {
-        byte[][] bytes = new byte[SIZE][SIZE];
+        byte[][] bytes2 = new byte[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
-            if (in.read(bytes[i]) != SIZE) {
+            if (in.read(bytes2[i]) != SIZE) {
                 throw new RuntimeException("Not enough bytes");
             }
             in.read();
         }
-        return bytes;
+        return bytes2;
     }
 
     private int getGearRatio() {
@@ -123,16 +124,16 @@ public class Day03 implements DayTemplate {
         return set.stream().mapToInt(ByteTuple::getNumber).reduce(1, Math::multiplyExact);
     }
 
-    private int getPartSum(byte[][] bytes) {
+    private int getPartSum(byte[][] bytes2) {
         int sum = 0;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 int skips = 0;
-                while (j + skips < SIZE && Character.isDigit(bytes[i][j + skips])) {
+                while (j + skips < SIZE && Character.isDigit(bytes2[i][j + skips])) {
                     skips++;
                 }
-                if (isValidRegion(bytes, i, j, skips)) {
-                    sum += getNumber(bytes[i], j, skips);
+                if (isValidRegion(bytes2, i, j, skips)) {
+                    sum += getNumber(bytes2[i], j, skips);
                 }
                 j += skips;
             }
@@ -140,30 +141,30 @@ public class Day03 implements DayTemplate {
         return sum;
     }
 
-    private int getNumber(byte[] bytes, int j, int skips) {
+    private int getNumber(byte[] bytes2, int j, int skips) {
         int num = 0;
         for (int i = j; i < j + skips; i++) {
             num *= 10;
-            num += bytes[i] - '0';
+            num += bytes2[i] - '0';
         }
         return num;
     }
 
-    private boolean isValidRegion(byte[][] bytes, int i, int j, int skips) {
-        if (j > 0 && bytes[i][j - 1] != '.') {
+    private boolean isValidRegion(byte[][] bytes2, int i, int j, int skips) {
+        if (j > 0 && bytes2[i][j - 1] != '.') {
             return true;
         }
-        if (j + skips < (SIZE - 1) && bytes[i][j + skips] != '.') {
+        if (j + skips < (SIZE - 1) && bytes2[i][j + skips] != '.') {
             return true;
         }
         for (int k = 0; k < skips + 2; k++) {
             if (j + k == 0 || j + k >= SIZE) {
                 continue;
             }
-            if (i > 0 && bytes[i - 1][j - 1 + k] != '.') {
+            if (i > 0 && bytes2[i - 1][j - 1 + k] != '.') {
                 return true;
             }
-            if (i < SIZE - 1 && bytes[i + 1][j - 1 + k] != '.') {
+            if (i < SIZE - 1 && bytes2[i + 1][j - 1 + k] != '.') {
                 return true;
             }
         }
