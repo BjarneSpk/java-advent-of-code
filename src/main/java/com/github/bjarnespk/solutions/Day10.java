@@ -1,5 +1,6 @@
 package com.github.bjarnespk.solutions;
 
+import com.github.bjarnespk.main.App;
 import com.github.bjarnespk.main.DayTemplate;
 import com.github.bjarnespk.main.Part;
 
@@ -36,21 +37,18 @@ public class Day10 implements DayTemplate {
 
         bfs(newSize);
 
-        return shrinkGrid(growthFactor);
+        return countInnerNodes(growthFactor);
     }
 
-    private int shrinkGrid(int growthFactor) {
-        byte[][] newGrid = new byte[SIZE][SIZE];
+    private int countInnerNodes(int growthFactor) {
         int innerNodes = 0;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                newGrid[i][j] = bytes[i * growthFactor + 1][j * growthFactor + 1];
-                if (newGrid[i][j] == 0) {
+                if (bytes[i * growthFactor + 1][j * growthFactor + 1] == 0) {
                     innerNodes++;
                 }
             }
         }
-        bytes = newGrid;
         return innerNodes;
     }
 

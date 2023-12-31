@@ -11,16 +11,21 @@ import java.util.TreeSet;
 
 public class App {
 
-    // Modify these two for default values
+    // Modify these for default values
     private static final Set<Integer> days = Set.of(7);
     private static final Set<Part> parts = Set.of(Part.PART_ONE);
 
+
+    // <============================== Do not modify =========================================> //
+
+
+    public static final String TEST = "test_";
+
     private static final String INPUT_PATH = "/com/github/bjarnespk/%sinput/input_%s.txt";
     private static final String SOLUTION_PATH = "com.github.bjarnespk.solutions.Day%s";
+    private static String test = "";
     private static Set<Part> partsToRun = new TreeSet<>();
     private static Set<Integer> daysToRun = new TreeSet<>();
-    private static String test = "";
-    public static final String TEST = "test_";
 
     public static void main(String[] args) {
         new App(args);
